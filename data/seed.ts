@@ -1,0 +1,177 @@
+// Datos iniciales (seed) que se cargan la primera vez que abres la app.
+// Después se guardan en localStorage y persisten entre sesiones.
+
+import type { AppState } from "@/types";
+
+export const seedData: AppState = {
+  config: {
+    extraHourPrice: 10,
+    fullDayHours: 9,
+  },
+
+  jobPositions: [
+    { id: "jp-001", name: "Oficial de primera", location: "Sevilla", mapsUrl: "https://maps.google.com/?q=Sevilla", active: true },
+    { id: "jp-002", name: "Peón", location: "Sevilla", active: true },
+    { id: "jp-003", name: "Encargado de obra", location: "Andalucía", active: true },
+  ],
+
+  workers: [
+    {
+      id: "w-001",
+      firstName: "Juan",
+      lastName: "García Pérez",
+      documentType: "DNI",
+      documentNumber: "28456789A",
+      email: "juan.garcia@email.com",
+      phone: "+34 600 111 222",
+      birthYear: 1985,
+      jobPositionId: "jp-001",
+      paymentMethod: "banco",
+      iban: "ES91 2100 0418 4502 0005 1332",
+      dailySalary: 95,
+      bankAmount: 1800,
+      active: true,
+      notes: "Especialista en albañilería.",
+      salaryHistory: [
+        { date: "2024-01-01", amount: 85 },
+        { date: "2025-01-01", amount: 95 },
+      ],
+    },
+    {
+      id: "w-002",
+      firstName: "Mohamed",
+      lastName: "El Amrani",
+      documentType: "NIE",
+      documentNumber: "Y1234567B",
+      phone: "+34 600 333 444",
+      birthYear: 1992,
+      jobPositionId: "jp-002",
+      paymentMethod: "efectivo",
+      dailySalary: 75,
+      active: true,
+      salaryHistory: [{ date: "2025-01-01", amount: 75 }],
+    },
+    {
+      id: "w-003",
+      firstName: "Antonio",
+      lastName: "Ramírez López",
+      documentType: "DNI",
+      documentNumber: "12345678Z",
+      email: "antonio.ramirez@email.com",
+      phone: "+34 600 555 666",
+      birthYear: 1978,
+      jobPositionId: "jp-003",
+      paymentMethod: "banco",
+      iban: "ES12 0049 1500 0512 3456 7890",
+      dailySalary: 120,
+      bankAmount: 2400,
+      active: true,
+      notes: "Encargado con 20 años de experiencia.",
+      salaryHistory: [{ date: "2025-01-01", amount: 120 }],
+    },
+  ],
+
+  clients: [
+    {
+      id: "c-001",
+      businessName: "Construcciones del Sur S.L.",
+      documentType: "CIF",
+      documentNumber: "B-12345678",
+      phone: "+34 954 100 200",
+      email: "contacto@construccionesdelsur.es",
+      address: "Av. de la Constitución 10, Sevilla",
+      notes: "Cliente recurrente.",
+    },
+    {
+      id: "c-002",
+      businessName: "María",
+      lastName: "Fernández Castro",
+      documentType: "DNI",
+      documentNumber: "44556677X",
+      phone: "+34 600 700 800",
+      email: "maria.fernandez@email.com",
+      address: "Calle Sierpes 25, Sevilla",
+    },
+    {
+      id: "c-003",
+      businessName: "Inversiones Triana S.A.",
+      documentType: "CIF",
+      documentNumber: "A-87654321",
+      phone: "+34 954 300 400",
+      email: "info@inversionestriana.es",
+      address: "Calle Pureza 100, Sevilla",
+    },
+  ],
+
+  workSites: [
+    {
+      id: "ws-001",
+      name: "Reforma piso Calle Feria 45",
+      status: "activa",
+      clientId: "c-001",
+      startDate: "2026-03-01",
+      estimatedEndDate: "2026-06-30",
+      budget: 35000,
+      mapsUrl: "https://maps.google.com/?q=Calle+Feria+45+Sevilla",
+      notes: "Reforma integral de 90m².",
+    },
+    {
+      id: "ws-002",
+      name: "Local comercial Av. Luis Montoto",
+      status: "activa",
+      clientId: "c-003",
+      startDate: "2026-04-15",
+      estimatedEndDate: "2026-07-15",
+      budget: 52000,
+    },
+    {
+      id: "ws-003",
+      name: "Vivienda unifamiliar Tomares",
+      status: "en_pausa",
+      clientId: "c-002",
+      startDate: "2026-02-10",
+      estimatedEndDate: "2026-08-10",
+      budget: 110000,
+      notes: "En pausa por licencia urbanística.",
+    },
+    {
+      id: "ws-004",
+      name: "Comunidad Plaza Nueva 8",
+      status: "no_iniciada",
+      clientId: "c-001",
+      startDate: "2026-06-01",
+      estimatedEndDate: "2026-09-01",
+      budget: 22000,
+    },
+  ],
+
+  attendances: [
+    { id: "a-001", date: "2026-05-04", workerId: "w-001", workSiteId: "ws-001", hoursWorked: 9, extraHours: 2 },
+    { id: "a-002", date: "2026-05-05", workerId: "w-001", workSiteId: "ws-001", hoursWorked: 9, extraHours: 0 },
+    { id: "a-003", date: "2026-05-06", workerId: "w-001", workSiteId: "ws-002", hoursWorked: 5, extraHours: 0, notes: "Media jornada por cita médica." },
+    { id: "a-004", date: "2026-05-07", workerId: "w-001", workSiteId: "ws-001", hoursWorked: 9, extraHours: 1 },
+    { id: "a-005", date: "2026-05-04", workerId: "w-002", workSiteId: "ws-001", hoursWorked: 9, extraHours: 0 },
+    { id: "a-006", date: "2026-05-05", workerId: "w-002", workSiteId: "ws-002", hoursWorked: 9, extraHours: 3 },
+    { id: "a-007", date: "2026-05-06", workerId: "w-002", workSiteId: "ws-002", hoursWorked: 9, extraHours: 0 },
+    { id: "a-008", date: "2026-05-04", workerId: "w-003", workSiteId: "ws-001", hoursWorked: 9, extraHours: 1 },
+    { id: "a-009", date: "2026-05-05", workerId: "w-003", workSiteId: "ws-002", hoursWorked: 9, extraHours: 0 },
+    { id: "a-010", date: "2026-05-06", workerId: "w-003", workSiteId: "ws-002", hoursWorked: 9, extraHours: 2 },
+    { id: "a-011", date: "2026-05-07", workerId: "w-003", workSiteId: "ws-001", hoursWorked: 7, extraHours: 0 },
+  ],
+
+  paymentPlaces: [
+    { id: "pp-001", name: "Oficina central" },
+    { id: "pp-002", name: "Obra Calle Feria" },
+    { id: "pp-003", name: "Banco Santander" },
+    { id: "pp-004", name: "Obra Av. Luis Montoto" },
+  ],
+
+  economicRecords: [
+    { id: "er-001", date: "2026-05-05", workerId: "w-001", type: "adelanto", amount: 150, placeId: "pp-001", description: "Adelanto por imprevisto familiar." },
+    { id: "er-002", date: "2026-05-10", workerId: "w-001", type: "pago_adelanto", amount: 50, placeId: "pp-002", description: "Devolución parcial." },
+    { id: "er-003", date: "2026-05-06", workerId: "w-002", type: "adelanto", amount: 100, placeId: "pp-002" },
+    { id: "er-004", date: "2026-04-30", workerId: "w-003", type: "sueldo", amount: 2400, placeId: "pp-003", description: "Sueldo abril 2026." },
+  ],
+
+  monthClosures: [],
+};

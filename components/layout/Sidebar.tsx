@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -11,12 +12,18 @@ interface NavItem {
   permission: Permission;
 }
 
-const navItems: NavItem[] = [
+const topItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", permission: "summary.read" },
+];
+
+const datosItems: NavItem[] = [
   { href: "/dashboard/trabajadores", label: "Trabajadores", permission: "workers.read" },
   { href: "/dashboard/puestos", label: "Puestos", permission: "jobpositions.read" },
   { href: "/dashboard/clientes", label: "Clientes", permission: "clients.read" },
   { href: "/dashboard/obras", label: "Obras", permission: "worksites.read" },
+];
+
+const bottomItems: NavItem[] = [
   { href: "/dashboard/asistencias", label: "Rellenar días", permission: "attendances.write" },
   { href: "/dashboard/registros", label: "Registros", permission: "records.write" },
   { href: "/dashboard/resumen", label: "Resumen mensual", permission: "summary.read" },
@@ -32,7 +39,32 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { can, user } = useAuth();
 
-  const visibleItems = navItems.filter((item) => can(item.permission));
+  const isDatosActive = datosItems.some((i) => pathname?.startsWith(i.href));
+  const [datosOpen, setDatosOpen] = useState(isDatosActive);
+
+  const visibleTop = topItems.filter((item) => can(item.permission));
+  const visibleDatos = datosItems.filter((item) => can(item.permission));
+  const visibleBottom = bottomItems.filter((item) => can(item.permission));
+
+  function renderItem(item: NavItem) {
+    const active =
+      item.href === "/dashboard"
+        ? pathname === "/dashboard"
+        : pathname?.startsWith(item.href);
+    return (
+      <li key={item.href}>
+        <Link
+          href={item.href}
+          onClick={onClose}
+          className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+            active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100"
+          }`}
+        >
+          {item.label}
+        </Link>
+      </li>
+    );
+  }
 
   return (
     <>
@@ -66,27 +98,53 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <ul className="space-y-1">
-            {visibleItems.map((item) => {
-              const active =
-                item.href === "/dashboard"
-                  ? pathname === "/dashboard"
-                  : pathname?.startsWith(item.href);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={onClose}
-                    className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
-                      active
-                        ? "bg-slate-900 text-white"
-                        : "text-slate-700 hover:bg-slate-100"
-                    }`}
+            {visibleTop.map(renderItem)}
+
+            {visibleDatos.length > 0 && (
+              <li>
+                <button
+                  type="button"
+                  onClick={() => setDatosOpen((o) => !o)}
+                  className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-100"
+                >
+                  <span>Datos</span>
+                  <svg
+                    className={`h-4 w-4 transition-transform duration-200 ${datosOpen ? "rotate-90" : ""}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
                   >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+
+                {datosOpen && (
+                  <ul className="mt-1 space-y-1 pl-3">
+                    {visibleDatos.map((item) => {
+                      const active = pathname?.startsWith(item.href);
+                      return (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            onClick={onClose}
+                            className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                              active
+                                ? "bg-slate-900 text-white"
+                                : "text-slate-700 hover:bg-slate-100"
+                            }`}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </li>
+            )}
+
+            {visibleBottom.map(renderItem)}
           </ul>
         </nav>
 
